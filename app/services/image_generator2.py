@@ -1,6 +1,6 @@
 from PIL import Image
 from io import BytesIO
-from app.model.sd_model1 import pipeline
+from model.sd_model1 import pipeline
 import torch
 
 # Base prompts for Botox and Filler treatments (optimized)
@@ -57,18 +57,26 @@ def build_prompt(area: str, injection_number: int) -> (str, float):
         max_area_units = max_units.get(area, 30)
         normalized_units = min(injection_number / max_area_units, 1.0)
         effect_strength = 0.1 + (0.3 * (normalized_units ** 0.7))
-        strength = min(effect_strength, 0.30)  # Slightly lower max cap for safety
+        strength = min(effect_strength, 0.25)  # Slightly lower max cap for safety
 
+        # prompt = (
+        #     f"High-quality medical photograph after {injection_number} units of Botox in the {treatment_name} area. "
+        #     f"{base_prompts.get(area, '')} No distortion, no facial identity changes."
+        # )
         prompt = (
-            f"High-quality medical photograph after {injection_number} units of Botox in the {treatment_name} area. "
-            f"{base_prompts.get(area, '')} No distortion, no facial identity changes."
-        )
+        f"High-quality medical photograph after {injection_number} units of Botox in the {treatment_name} area. "
+        f"{base_prompts.get(area, '')} Eyes, facial features, and skin tone remain completely unchanged. "
+        "No artistic changes. Strictly realistic and medically accurate."
+        )   
+
 
     elif area in FILLER_AREAS:
         strength = 0.25  # Filler generally uses fixed, subtle strength
         prompt = (
             f"High-quality medical photograph after filler treatment in the {treatment_name} area. "
-            f"{base_prompts.get(area, '')} No distortion, no facial identity changes."
+            # f"{base_prompts.get(area, '')} No distortion, no facial identity changes."
+            f"{base_prompts.get(area, '')} Eyes, facial features, and skin tone remain completely unchanged. "
+            "No artistic changes. Strictly realistic and medically accurate."
         )
 
     else:
@@ -84,7 +92,9 @@ def generate_images(image: Image.Image, area: str, injection_number: int = 0):
 
     # Strong, clean negative prompt to eliminate distortions
     negative_prompt = (
-        "unrealistic, wax figure,cartoon, distorted face, deformed, blurry, exaggerated, mutated features, morphed, exaggerated, overdone, duplicate faces, artifacts, identity change, unnatural skin texture"
+    "extra fingers, mutated hands, blurry, deformed, bad anatomy, disfigured, poorly drawn face, mutation, "
+    "fused fingers, too many fingers, long neck, cloned face, duplicate face, alien, plastic, waxy, cartoon, "
+    "unnatural skin, unnatural eye color, changed eye color, face distortion, identity change, glowing skin, anime"
     )
 
     print(f"Generating {treatment_name} result"
@@ -97,7 +107,7 @@ def generate_images(image: Image.Image, area: str, injection_number: int = 0):
             negative_prompt=negative_prompt,
             image=image,
             strength=strength,
-            guidance_scale=8.0  # Slightly higher for better prompt adherence
+            guidance_scale=8.5  # Slightly higher for better prompt adherence
         ).images[0]
 
         # Save the result into a buffer

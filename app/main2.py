@@ -3,7 +3,7 @@ import torch
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import StreamingResponse
 from typing import List
-from app.services.image_generator2 import generate_images
+from services.image_generator2 import generate_images
 from PIL import Image
 from io import BytesIO
 import zipfile

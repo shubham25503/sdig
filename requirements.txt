@@ -1,2 +1,13 @@
+torch==2.2.1
+torchvision
+torchaudio
 diffusers
 transformers
+accelerate
+safetensors
+numpy
+Pillow
+fastapi
+uvicorn
+python-multipart
+pydantic
