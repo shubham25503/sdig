@@ -6,7 +6,7 @@ diffusers==0.25.0
 transformers==4.37.2
 accelerate==0.27.2
 safetensors==0.4.2
-numpy>=1.25.0,<2.0.0
+numpy==1.25.0
 Pillow==10.2.0
 fastapi==0.109.2
 uvicorn==0.27.1
@@ -14,7 +14,9 @@ python-multipart==0.0.9
 pydantic==2.6.1
 xformers==0.0.23.post1
 controlnet-aux==0.0.7
-opencv-python-headless==4.9.0.80
+opencv-python==4.9.0.80
 einops==0.8.1
 scikit-image==0.25.2
 mediapipe==0.10.21
+aiohttp==3.9.3
+websockets==12.0
